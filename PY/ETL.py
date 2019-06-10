@@ -1,3 +1,7 @@
+"""
+The purpose of this python file is to gather the data, clean it, and save the resulting dataframe.
+"""
+
 # import libraries
 import pandas as pd
 from sqlalchemy import create_engine
@@ -23,7 +27,7 @@ def merge_data():
 def category_columns(df):
     """
     Input: dataframe from merged_data
-    Output: create dummies
+    Output: cleaned dataframe
     Tasks Performed:
         - split on ";" and assign to new columns.
         - take the text from first row, remove the non-alpha components.  Assign to columns.
@@ -62,8 +66,21 @@ def category_columns(df):
     return df
 
 
-def ETL():
+def main():
+    """
+    Input: none
+    Output: saved db
+    Tasks Performed:
+        - bring in the data with merge_data
+        - clean the data using category_columns
+        - save as db.
+        - tell the user "done"
+    """
     df = merge_data()
     df = category_columns(df)
     engine = create_engine('sqlite:///DisasterResponse.db')
-    df.to_sql('disaster_response', engine, index=False)
+    df.to_sql('disaster_response', con=engine, index=False, if_exists="replace")
+    print ("done")
+
+if __name__ == '__main__':
+    main()
