@@ -11,7 +11,7 @@ import pickle
 import pandas as pd
 import numpy as np
 from sqlalchemy import create_engine
-from nltk.tokenize import word_tokenize
+from nltk.tokenize import word_tokenize, sent_tokenize
 from nltk.stem import WordNetLemmatizer
 from sklearn.metrics import confusion_matrix
 from sklearn.model_selection import train_test_split, GridSearchCV
@@ -128,12 +128,12 @@ def new_model_pipeline():
     return cv
 
 
-def save_model(model):
+def save_model(model, model_filepath):
     """
     Input: model.
     Output: saved model called classified.sav
     """
-    filename = "classified.sav"
+    filename = model_filepath
     pickle.dump(model, open(filename, "wb"))
     pass
 
@@ -171,7 +171,7 @@ def main():
         print("------------------------------------------------------\n")
 
     # return the saved model.
-    saved = save_model(model)
+    saved = save_model(model, "classifier.pkl")
     print ("doned")
 
     return saved
