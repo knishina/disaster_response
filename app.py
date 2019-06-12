@@ -61,12 +61,6 @@ df = pd.read_sql_table('disaster_response', engine)
 # load the model.
 model = joblib.load("PY/classifier.pkl")
 
-
-
-@app.route("/")
-def home():
-    return render_template("index.html")
-
 @app.route("/genres")
 def raw_data1():
     dict = df["genre"].value_counts()
@@ -90,22 +84,7 @@ def raw_data2():
     return jsonify(cat_dict)
 
 
-# @app.route("/text")
-# def text_input():
-#     query = request.args.get('query', '') 
-#     query = tokenize(query)
-#     classification_labels = model.predict(query)[0]
-#     classification_results = dict(zip(df.columns[4:], classification_labels))
-
-#     listy = []
-#     for classification in classification_results:
-#         if classification_results[classification] == 1:
-#             listy.append(classification)
-#     lister = {categories: listy}
-    
-
-#     return jsonify(lister)
-@app.route('/go')
+@app.route('/')
 def go():
     # save user input in query
     query = request.args.get('query', '') 
