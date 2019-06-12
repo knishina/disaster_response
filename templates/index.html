@@ -6,11 +6,31 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Disaster Response</title>
-    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="../static/style.css">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
 </head>
 
 <body>
+    <nav class="navbar navbar-expand-lg navbar-light bg-light fixed-top">
+        <img class="navbar-brand" src="../static/Images/elements.png" width="40">
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNavDropdown">
+            <ul class="navbar-nav mr-auto">    
+                <li class="nav-item"><a class="nav-link" href="index.html"><strong>Home</strong></a></li>
+                <li class="nav-item"><a class="nav-link" href="personal.html"><strong>About</strong></a></li>
+            </ul>
+            <ul class="navbar-nav ml-auto">
+                <li class="nav-item"><a class="nav-link" data-toggle="tooltip" data-placement="top" title="GitHub" href="https://github.com/knishina/" target="_blank"><img src="../static/Images/github.png" alt="github" width="28"></a></li>
+                <li class="nav-item"><a class="nav-link" data-toggle="tooltip" data-placement="top" title="LinkedIn" href="https://linkedin.com/in/knishina/" target="_blank"><img src="../static/Images/linkedin.png" alt="linkedin" width="25"></a></li>
+                <li class="nav-item"><a class="nav-link" data-toggle="tooltip" data-placement="top" title="Gmail"  href="mailto:koren.a.nishina@gmail.com"><img src="../static/Images/gmail.jpeg" alt="gmail" width="28"></a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <br />
+    <br />
     <div class="container">
         <br>
         <div class="jumbotron" style="text-align: center; background-color:rgb(240, 239, 239);border:rgb(154, 155, 156) solid 2px">
@@ -18,10 +38,57 @@
             <p>Use the interactive charts below to explore the dataset.</p>
         </div>
     </div>
+    <div class="row">
+        <div class="container col-md-12 basic">
+            <form action="/go" method="get">
+                <input type="text" class="form-control form-control-lg" name="query" placeholder="Enter a message to classify" style="text-align: center;">
+                <div class="col-lg-center-5" align="center">
+                    <button type="submit" class="btn btn-lg btn-success">Classify Message</button>
+                </div>
+            </form>
+        </div>
+    </div>
+    <br />
+    <div class="row">
+        <div class="container col-md-12 basic">
+            <hr />
+            <h4 class="text-center">MESSAGE</h4>
+            <p class="text-center"><i>{{query}}</i></p>
+            <hr />
+        </div>
+    </div>
+    <br />
+    <div class="row">
+        <div class="container col-md-5 basic">
+            <h4 class="text-center">Result</h4>
+            <ul class="list-group">
+            {% for category, classification in classification_result.items() %}
+                {% if classification == 1 %}
+                    <li class="list-group-item list-group-item-success text-center" style="margin: 0px; padding: 1px;">{{category.replace('_', ' ').title()}}</li>
+                {% else %}
+                    <li class="list-group-item list-group-item-dark text-center" style="margin: 0px; padding: 1px;">{{category.replace('_', ' ').title()}}</li>
+                {% endif %}
+            {% endfor %}
+            </ul>
+        </div>
+        <div class="container col-md-5" id="graph">
+            <div class="span boxyy" id="pie"></div>
+            <hr style="border-style: dotted; border-width: 1px;"/>
+            <br />
+            <div class="span boxyy" id="plot"></div>
+        </div>
+    </div>
+    <div class="row" id="boxy"></div>
+
+
+
 
 
     <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+    <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+    <script src="{{ url_for('static', filename='js/app.js') }}"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/4.13.0/d3.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
-
+    <script src="http://d3js.org/d3.v3.min.js" charset="UTF-8"></script>
 </body>

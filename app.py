@@ -1,3 +1,4 @@
+import re
 import json
 import nltk
 import plotly
@@ -58,7 +59,7 @@ engine = create_engine("sqlite:///PY/DisasterResponse.db")
 df = pd.read_sql_table('disaster_response', engine)
 
 # load the model.
-# model = joblib.load("PY/classifier.pkl")
+model = joblib.load("PY/classifier.pkl")
 
 
 
@@ -67,7 +68,7 @@ def home():
     return render_template("index.html")
 
 @app.route("/genres")
-def raw_data():
+def raw_data1():
     dict = df["genre"].value_counts()
     genres_dict = {}
     genres_dict["direct"] = int(dict["direct"])
@@ -76,6 +77,49 @@ def raw_data():
 
     return jsonify(genres_dict)
 
+
+@app.route("/categories")
+def raw_data2():
+    category_names = df.iloc[:, 4:].columns
+    category_values = (df.iloc[:, 4:] != 0).sum().values
+    cat_df = pd.DataFrame([category_values], columns=category_names)
+
+    cat_dict = {}
+    for column in cat_df:
+        cat_dict[column] = int(cat_df[column])
+    return jsonify(cat_dict)
+
+
+# @app.route("/text")
+# def text_input():
+#     query = request.args.get('query', '') 
+#     query = tokenize(query)
+#     classification_labels = model.predict(query)[0]
+#     classification_results = dict(zip(df.columns[4:], classification_labels))
+
+#     listy = []
+#     for classification in classification_results:
+#         if classification_results[classification] == 1:
+#             listy.append(classification)
+#     lister = {categories: listy}
+    
+
+#     return jsonify(lister)
+@app.route('/go')
+def go():
+    # save user input in query
+    query = request.args.get('query', '') 
+
+    # use model to predict classification for query
+    classification_labels = model.predict([query])[0]
+    classification_results = dict(zip(df.columns[4:], classification_labels))
+
+    # This will render the go.html Please see that file. 
+    return render_template(
+        'index.html',
+        query=query,
+        classification_result=classification_results
+    )
 
 if __name__ == '__main__':
 	app.run(debug = True)
