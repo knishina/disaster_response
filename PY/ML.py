@@ -171,10 +171,9 @@ def main():
         print("------------------------------------------------------\n")
 
     # return the saved model.
-    saved = save_model(model, "classifier.pkl")
+    with open('classifier.pkl', 'wb') as file:
+        pickle.dump(model, file)
     print ("doned")
-
-    return saved
 
 
 if __name__ == '__main__':
