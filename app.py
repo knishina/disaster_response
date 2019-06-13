@@ -4,6 +4,7 @@ import nltk
 import plotly
 import pandas as pd
 
+from nltk.downloader import download, download_shell 
 from nltk.corpus import stopwords
 from nltk.stem import WordNetLemmatizer
 from nltk.tokenize import word_tokenize, sent_tokenize
