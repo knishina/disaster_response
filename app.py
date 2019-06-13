@@ -1,3 +1,4 @@
+import sys
 import re
 import os
 import json
@@ -12,14 +13,12 @@ nltk.download('averaged_perceptron_tagger')
 from nltk.corpus import stopwords
 from nltk.stem import WordNetLemmatizer
 from nltk.tokenize import word_tokenize, sent_tokenize
-from nltk import pos_tag, word_tokenize
 
 from sklearn.base import BaseEstimator, TransformerMixin
 from sklearn.externals import joblib
 
 from flask import Flask, render_template, request, jsonify, redirect
 from flask_sqlalchemy import sqlalchemy
-from sqlalchemy import create_engine
 from sqlalchemy.ext.automap import automap_base
 from sqlalchemy.orm import Session
 from sqlalchemy import create_engine, func, inspect
