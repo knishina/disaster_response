@@ -27,6 +27,37 @@ from sqlalchemy import create_engine, func, inspect
 
 app = Flask(__name__)
 
+# load the data.
+engine = create_engine("sqlite:///PY/DisasterResponse.db")
+df = pd.read_sql_table('disaster_response', engine)
+
+# load the model.
+model = joblib.load("PY/classifier.pkl")
+
+@app.route("/genres")
+def raw_data1():
+    dict = df["genre"].value_counts()
+    genres_dict = {}
+    genres_dict["direct"] = int(dict["direct"])
+    genres_dict["news"] = int(dict["news"])
+    genres_dict["social"] = int(dict["social"])
+
+    return jsonify(genres_dict)
+
+
+@app.route("/categories")
+def raw_data2():
+    category_names = df.iloc[:, 4:].columns
+    category_values = (df.iloc[:, 4:] != 0).sum().values
+    cat_df = pd.DataFrame([category_values], columns=category_names)
+
+    cat_dict = {}
+    for column in cat_df:
+        cat_dict[column] = int(cat_df[column])
+    return jsonify(cat_dict)
+
+
+@app.route('/')
 class StartingVerbExtractor(BaseEstimator, TransformerMixin):
     def starting_verb(self, text):
         sentence_list = nltk.sent_tokenize(text)
@@ -59,39 +90,9 @@ def tokenize(text):
         clean_tokens.append(clean_tok)
     return clean_tokens
 
-
-# load the data.
-engine = create_engine("sqlite:///PY/DisasterResponse.db")
-df = pd.read_sql_table('disaster_response', engine)
-
-# load the model.
-model = joblib.load("PY/classifier.pkl")
-
-@app.route("/genres")
-def raw_data1():
-    dict = df["genre"].value_counts()
-    genres_dict = {}
-    genres_dict["direct"] = int(dict["direct"])
-    genres_dict["news"] = int(dict["news"])
-    genres_dict["social"] = int(dict["social"])
-
-    return jsonify(genres_dict)
-
-
-@app.route("/categories")
-def raw_data2():
-    category_names = df.iloc[:, 4:].columns
-    category_values = (df.iloc[:, 4:] != 0).sum().values
-    cat_df = pd.DataFrame([category_values], columns=category_names)
-
-    cat_dict = {}
-    for column in cat_df:
-        cat_dict[column] = int(cat_df[column])
-    return jsonify(cat_dict)
-
-
-@app.route('/')
+    
 def go():
+    
     # save user input in query
     query = request.args.get('query', '') 
 
