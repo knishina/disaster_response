@@ -5,7 +5,9 @@ import plotly
 import pandas as pd
 
 import nltk
-from nltk.downloader import download, download_shell 
+nltk.download('punkt')
+nltk.download('wordnet')
+nltk.download('averaged_perceptron_tagger')
 from nltk.corpus import stopwords
 from nltk.stem import WordNetLemmatizer
 from nltk.tokenize import word_tokenize, sent_tokenize
