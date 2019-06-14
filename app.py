@@ -4,6 +4,7 @@ import os
 import json
 import nltk
 import plotly
+import joblib
 import pandas as pd
 
 import nltk
@@ -15,7 +16,6 @@ from nltk.stem import WordNetLemmatizer
 from nltk.tokenize import word_tokenize, sent_tokenize
 
 from sklearn.base import BaseEstimator, TransformerMixin
-from sklearn.externals import joblib
 
 from flask import Flask, render_template, request, jsonify, redirect
 from flask_sqlalchemy import sqlalchemy
